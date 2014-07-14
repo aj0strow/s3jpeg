@@ -2,6 +2,8 @@ package s3jpeg
 
 import (
   "testing"
+  "os"
+  "image/jpeg"
 )
 
 func TestNew(t *testing.T) {
@@ -13,8 +15,24 @@ func TestNew(t *testing.T) {
 
 func TestGetImage(t *testing.T) {
   bucket := New("modde-test")
-  jpeg, e := bucket.GetImage("test_image.jpg")
-  if jpeg == nil || e != nil {
+  _, e := bucket.GetImage("test_image.jpg")
+  if e != nil {
+    t.Errorf("Got error %s.", e.Error())
+  }
+}
+
+func TestPutImage(t *testing.T) {
+  bucket := New("modde-test")
+  file, e := os.Open("logo.jpg")
+  if e != nil {
+    t.Errorf("Can't open modde.jpg file.")
+  }
+  img, e := jpeg.Decode(file)
+  if e != nil {
+    t.Errorf("Got decode error %s.", e.Error())
+  }
+  e = bucket.PutImage("test/logo.jpg", img, 50)
+  if e != nil {
     t.Errorf("Got error %s.", e.Error())
   }
 }
