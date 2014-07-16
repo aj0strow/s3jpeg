@@ -16,15 +16,15 @@ func openImage(fname string) (image.Image, error) {
 	return jpeg.Decode(file)
 }
 
-func TestNew(t *testing.T) {
-	bucket := New("modde-test")
+func TestNewBucket(t *testing.T) {
+	bucket := NewBucket("modde-test")
 	if bucket.S3 == nil {
 		t.Errorf("Coundn't find auth in env.")
 	}
 }
 
 func TestGetImage(t *testing.T) {
-	bucket := New("modde-test")
+	bucket := NewBucket("modde-test")
 	_, e := bucket.GetImage("test_image.jpg")
 	if e != nil {
 		t.Errorf("Got error %s.", e.Error())
@@ -32,7 +32,7 @@ func TestGetImage(t *testing.T) {
 }
 
 func TestPutImage(t *testing.T) {
-	bucket := New("modde-test")
+	bucket := NewBucket("modde-test")
 	img, e := openImage("logo.jpg")
 	e = bucket.PutImage("test/logo.jpg", img, 50)
 	if e != nil {
@@ -41,7 +41,7 @@ func TestPutImage(t *testing.T) {
 }
 
 func TestPutResize(t *testing.T) {
-	bucket := New("modde-test")
+	bucket := NewBucket("modde-test")
 	img, e := openImage("logo.jpg")
 	small := Version{100, 0, 80}
 	e = bucket.PutResize("test/resize/image.jpg", img, &small)
@@ -51,7 +51,7 @@ func TestPutResize(t *testing.T) {
 }
 
 func TestPutResizeReader(t *testing.T) {
-	bucket := New("modde-test")
+	bucket := NewBucket("modde-test")
 	file, e := os.Open("logo.jpg")
 	medium := Version{100, 0, 80}
 	e = bucket.PutResizeReader("test/resize/reader.jpg", file, &medium)
@@ -61,7 +61,7 @@ func TestPutResizeReader(t *testing.T) {
 }
 
 func TestPutFit(t *testing.T) {
-	bucket := New("modde-test")
+	bucket := NewBucket("modde-test")
 	img, e := openImage("logo.jpg")
 	small := Version{200, 200, 60}
 	e = bucket.PutFit("test/fit/image.jpg", img, &small)
@@ -71,7 +71,7 @@ func TestPutFit(t *testing.T) {
 }
 
 func TestPutFitReader(t *testing.T) {
-	bucket := New("modde-test")
+	bucket := NewBucket("modde-test")
 	file, e := os.Open("logo.jpg")
 	medium := Version{200, 200, 60}
 	e = bucket.PutFitReader("test/fit/reader.jpg", file, &medium)
@@ -81,7 +81,7 @@ func TestPutFitReader(t *testing.T) {
 }
 
 func TestPutThumbnail(t *testing.T) {
-	bucket := New("modde-test")
+	bucket := NewBucket("modde-test")
 	img, e := openImage("logo.jpg")
 	small := Version{100, 45, 80}
 	e = bucket.PutThumbnail("test/thumbnail/image.jpg", img, &small)
@@ -91,7 +91,7 @@ func TestPutThumbnail(t *testing.T) {
 }
 
 func TestPutThumbnailReader(t *testing.T) {
-	bucket := New("modde-test")
+	bucket := NewBucket("modde-test")
 	file, e := os.Open("logo.jpg")
 	medium := Version{100, 45, 90}
 	e = bucket.PutThumbnailReader("test/thumbnail/reader.jpg", file, &medium)

@@ -15,11 +15,7 @@ type Bucket struct {
 	ACL s3.ACL
 }
 
-type Version struct {
-	Width, Height, Quality int
-}
-
-func New(name string) *Bucket {
+func NewBucket(name string) *Bucket {
 	bucket := new(Bucket)
 	bucket.Name = name
 	bucket.ACL = s3.PublicRead
