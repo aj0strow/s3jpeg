@@ -52,50 +52,18 @@ func (b *Bucket) PutImage(path string, i image.Image, quality int) error {
 	return b.PutReader(path, &r, len, "image/jpeg", b.ACL)
 }
 
-// Resize
-// leave width or height 0 to maintain ratio
-
-func (b *Bucket) PutResize(path string, i image.Image, v *Version) error {
-	img := imaging.Resize(i, v.Width, v.Height, imaging.Lanczos)
-	return b.PutImage(path, img, v.Quality)
-}
-
-func (b *Bucket) PutResizeReader(path string, r io.Reader, v *Version) error {
-	img, e := jpeg.Decode(r)
-	if e != nil {
-		return e
-	}
-	return b.PutResize(path, img, v)
-}
-
-// Fit
-// scale image down to fit within width x height box
-
-func (b *Bucket) PutFit(path string, i image.Image, v *Version) error {
-	img := imaging.Fit(i, v.Width, v.Height, imaging.Lanczos)
-	return b.PutImage(path, img, v.Quality)
-}
-
-func (b *Bucket) PutFitReader(path string, r io.Reader, v *Version) error {
-	img, e := jpeg.Decode(r)
-	if e != nil {
-		return e
-	}
-	return b.PutFit(path, img, v)
-}
-
 // Thumbnail
 // crop image to width and height
 
-func (b *Bucket) PutThumbnail(path string, i image.Image, v *Version) error {
+func (b *Bucket) PutThumbnail(i image.Image, v *Version) error {
 	img := imaging.Thumbnail(i, v.Width, v.Height, imaging.Lanczos)
-	return b.PutImage(path, img, v.Quality)
+	return b.PutImage(v.Key, img, v.Quality)
 }
 
-func (b *Bucket) PutThumbnailReader(path string, r io.Reader, v *Version) error {
+func (b *Bucket) PutThumbnailReader(r io.Reader, v *Version) error {
 	img, e := jpeg.Decode(r)
 	if e != nil {
 		return e
 	}
-	return b.PutThumbnail(path, img, v)
+	return b.PutThumbnail(img, v)
 }

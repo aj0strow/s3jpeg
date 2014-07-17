@@ -6,37 +6,18 @@ import (
   "strconv"
 )
 
-type Strategy int
-
-const (
-  Thumbnail = 0
-  Fit = 1
-  Resize = 2
-)
-
 type Version struct {
-	Width, Height, Quality int
+  Key string // relative s3 file key
+  Width, Height, Quality int
 }
 
-type Job struct {
-  Version *Version
-  Key string
-  Strategy Strategy
-}
+func NewVersion(key string) *Version {
+  version := new(Version)
 
-func NewJob(s Strategy, key string) *Job {
-  job := new(Job)
-  job.Version = parseVersion(key)
   if !strings.HasSuffix(key, ".jpg") {
     key += ".jpg"
   }
-  job.Key = key
-  job.Strategy = s
-  return job
-}
-
-func parseVersion (key string) *Version {
-  version := new(Version)
+  version.Key = key
 
   re := regexp.MustCompile("(\\d+)x(\\d+):(\\d+)")
   match := re.FindAllStringSubmatch(key, -1)
