@@ -24,3 +24,17 @@ func TestQueue(t *testing.T) {
     t.Errorf("Queue failed.")
   }
 }
+
+func TestRun(t *testing.T) {
+  worker := NewWorker(bucket)
+  r, e := worker.Bucket.GetReader("test/logo.jpg")
+  if e != nil {
+    t.Errorf(e.Error())
+  }
+  worker.Queue("test/logo_50x50:75.jpg")
+  worker.Queue("test/logo_60x40:75.jpg")
+  e = worker.Run(r)
+  if e != nil {
+    t.Errorf(e.Error())
+  }
+}

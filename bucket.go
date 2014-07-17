@@ -55,15 +55,15 @@ func (b *Bucket) PutImage(path string, i image.Image, quality int) error {
 // Thumbnail
 // crop image to width and height
 
-func (b *Bucket) PutThumbnail(i image.Image, v *Version) error {
+func (b *Bucket) PutThumbnailImage(i image.Image, v *Version) error {
 	img := imaging.Thumbnail(i, v.Width, v.Height, imaging.Lanczos)
 	return b.PutImage(v.Key, img, v.Quality)
 }
 
-func (b *Bucket) PutThumbnailReader(r io.Reader, v *Version) error {
+func (b *Bucket) PutThumbnail(r io.Reader, v *Version) error {
 	img, e := jpeg.Decode(r)
 	if e != nil {
 		return e
 	}
-	return b.PutThumbnail(img, v)
+	return b.PutThumbnailImage(img, v)
 }

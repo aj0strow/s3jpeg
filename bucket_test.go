@@ -40,21 +40,21 @@ func TestPutImage(t *testing.T) {
 	}
 }
 
-func TestPutThumbnail(t *testing.T) {
+func TestPutThumbnailImage(t *testing.T) {
 	bucket := NewBucket("modde-test")
 	img, e := openImage("logo.jpg")
 	small := Version{"test/thumbnail/image.jpg", 100, 45, 80}
-	e = bucket.PutThumbnail(img, &small)
+	e = bucket.PutThumbnailImage(img, &small)
 	if e != nil {
 		t.Errorf("Got error %s.", e.Error())
 	}
 }
 
-func TestPutThumbnailReader(t *testing.T) {
+func TestPutThumbnail(t *testing.T) {
 	bucket := NewBucket("modde-test")
 	file, e := os.Open("logo.jpg")
 	medium := Version{"test/thumbnail/reader.jpg", 100, 45, 90}
-	e = bucket.PutThumbnailReader(file, &medium)
+	e = bucket.PutThumbnail(file, &medium)
 	if e != nil {
 		t.Errorf("Got error %s.", e.Error())
 	}
